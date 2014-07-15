@@ -22,6 +22,7 @@ app.use(express.urlencoded());
 app.use(express.methodOverride());
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
+// app.use(express.static(path.join(__dirname, 'node_modules/socket.io/node_modules/socket.io-client')));
 
 // development only
 if ('development' == app.get('env')) {
@@ -31,6 +32,21 @@ if ('development' == app.get('env')) {
 app.get('/', routes.index);
 app.get('/users', user.list);
 
-http.createServer(app).listen(app.get('port'), function(){
+var server = http.createServer(app);
+server.listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
+
+// add socket.io
+var io = require('socket.io')(server);
+io.on('connection', function (socket) {
+  socket.emit('news', { hello: 'world from server' });
+  socket.on('my other event', function (data) {
+
+  	// throw Error('user raise it!');
+    console.log(data);
+  });
+});
+
+// Test Socket IO
+// ws.emit('my other event', 3123);
