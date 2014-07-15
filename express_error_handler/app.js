@@ -50,6 +50,11 @@ io.on('connection', function (socket) {
     catch(e){
       console.log(e);
     }
+
+    if(Math.random() >= 0.5){
+      throw Error('test2');
+    }
+
   });
 });
 
