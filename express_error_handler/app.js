@@ -38,13 +38,18 @@ server.listen(app.get('port'), function(){
 });
 
 // add socket.io
+// 乾要把 Error Handler 做好, 不然會讓整個 Server 掛掉
 var io = require('socket.io')(server);
 io.on('connection', function (socket) {
   socket.emit('news', { hello: 'world from server' });
   socket.on('my other event', function (data) {
-
-  	// throw Error('user raise it!');
-    console.log(data);
+    try{
+      console.log(data);
+      throw Error('user raise it!');
+    }
+    catch(e){
+      console.log(e);
+    }
   });
 });
 
